@@ -19,13 +19,15 @@ function appendTodoInHtml(todoText){
     todoList.appendChild(todo);
 }
 
-document.addEventListener("DOMContentLoad" , ()=>{
+document.addEventListener("DOMContentLoaded" , ()=>{
     const todoInput = document.getElementById("todoInput");
-
+    console.log(todoInput);
+    
     const submitButton = document.getElementById("addTodo");
 
     submitButton.addEventListener("click" , (event)=>{
         const todoText = todoInput.value;
+        console.log(todoText);
         if(todoText = ''){
             alert("Please write something for todo");
         }else{
@@ -41,6 +43,5 @@ document.addEventListener("DOMContentLoad" , ()=>{
 
         console.log(event.target.value);
     });
-
     loadTodos();
 })
