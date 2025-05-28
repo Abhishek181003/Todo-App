@@ -6,17 +6,42 @@ function loadTodos(){
 }
 
 // This function will add the given todo to the local storage
-function addToLocalStorage(todoText){
+function addTodosToLocalStorage(todo){
     const todos = loadTodos();
-    todos.todoList.push(todoText);
+    todos.todoList.push(todo);
     localStorage.setItem("todos" , JSON.stringify(todos));
 }
 
-function appendTodoInHtml(todoText){
+function appendTodoInHtml(todo){
     const todoList = document.getElementById("todoList");
-    const todo = document.createElement("li");
+    const todoItem = document.createElement("li");
 
-    todoList.appendChild(todo);
+    const textDiv = document.createElement("div");
+
+    textDiv.textContent = todo.text;
+    todoItem.classList.add("todoItem");
+    
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("todoButtons");
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.classList.add("editBtn");
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.classList.add("deleteBtn");
+
+    const completedBtn = document.createElement("button");
+    completedBtn.textContent = "Completed";
+    completedBtn.classList.add("completedBtn");
+
+    wrapper.appendChild(editBtn);
+    wrapper.appendChild(deleteBtn);
+    wrapper.appendChild(completedBtn);
+
+    todoItem.append(textDiv);
+    todoItem.appendChild(wrapper);
+    todoList.appendChild(todoItem);
 }
 
 document.addEventListener("DOMContentLoaded" , ()=>{
@@ -25,23 +50,29 @@ document.addEventListener("DOMContentLoaded" , ()=>{
     
     const submitButton = document.getElementById("addTodo");
 
+    const todoList = document.getElementById("todoList");
+
     submitButton.addEventListener("click" , (event)=>{
         const todoText = todoInput.value;
         console.log(todoText);
-        if(todoText = ''){
+        if(todoText == ''){
             alert("Please write something for todo");
         }else{
-            addToLocalStorage(todoText);
-            appendTodoInHtml(todoText);
+            addTodosToLocalStorage({text : todoText , isCompleted:false});
+            appendTodoInHtml({text : todoText , isCompleted:false});
+            todoInput.value = '';
         }
     })
     todoInput.addEventListener("change" , (event)=>{
         // This call back method is fired everytime there is a change in the input tag
         const todoText = event.target.value;
-
+        
         event.target.value = todoText.trim();
 
         console.log(event.target.value);
     });
-    loadTodos();
+    const todos = loadTodos();
+    todos.todoList.forEach((todo)=>{
+        appendTodoInHtml(todo);
+    })
 })
