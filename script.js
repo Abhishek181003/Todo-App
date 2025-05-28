@@ -12,6 +12,31 @@ function addTodosToLocalStorage(todo){
     localStorage.setItem("todos" , JSON.stringify(todos));
 }
 
+function executeFilterAction(event){
+    const todoList = document.getElementById("todoList");
+    const element = event.target;
+    const value = element.getAttribute("data-filter");
+    todoList.innerHTML = '';
+    const todos = loadTodos();
+    if(value === "all"){
+        todos.todoList.forEach((todo)=>{
+            appendTodoInHtml(todo);
+        });
+    }else if (value === "pending"){
+        todos.todoList.forEach((todo)=>{
+            if(todo.isCompleted !== true){
+                appendTodoInHtml(todo);
+            }
+        });
+    }else{
+        todos.todoList.forEach((todo)=>{
+            if(todo.isCompleted === true){
+                appendTodoInHtml(todo);
+            }
+        });
+    }
+}
+
 function appendTodoInHtml(todo){
     const todoList = document.getElementById("todoList");
     const todoItem = document.createElement("li");
@@ -52,6 +77,10 @@ document.addEventListener("DOMContentLoaded" , ()=>{
 
     const todoList = document.getElementById("todoList");
 
+    const filterBtns = document.getElementsByClassName("filterBtn");
+    for(btn of filterBtns){
+        btn.addEventListener("click" , executeFilterAction);
+    }
     submitButton.addEventListener("click" , (event)=>{
         const todoText = todoInput.value;
         console.log(todoText);
